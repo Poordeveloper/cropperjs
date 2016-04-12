@@ -351,7 +351,7 @@
     var newImage;
 
     // Modern browsers
-    if (image.naturalWidth) {
+    if (image.naturalWidth && !IS_SAFARI && !IS_IPHONE_WEIXIN) {
       return callback(image.naturalWidth, image.naturalHeight);
     }
 
@@ -547,7 +547,9 @@
           orientation = dataView.getUint16(offset, littleEndian);
 
           // Override the orientation with the default value: 1
-          dataView.setUint16(offset, 1, littleEndian);
+          if (IS_SAFARI || IS_IPHONE_WEIXIN) {
+            dataView.setUint16(offset, 1, littleEndian);
+          }
           break;
         }
       }

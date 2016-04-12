@@ -5,7 +5,7 @@
  * Copyright (c) 2015-2016 Fengyuan Chen
  * Released under the MIT license
  *
- * Date: 2016-01-18T05:33:43.542Z
+ * Date: 2016-04-12T10:30:38.949Z
  */
 
 (function (global, factory) {
@@ -106,6 +106,12 @@
   var hasOwnProperty = objectProto.hasOwnProperty;
   var slice = Array.prototype.slice;
   var fromCharCode = String.fromCharCode;
+
+  var IS_SAFARI = navigator && /safari/i.test(navigator.userAgent) && /apple computer/i.test(navigator.vendor); 
+  var IS_WEIXIN = navigator.userAgent.toLowerCase().match(/MicroMessenger/i)=="micromessenger";
+  var IS_IPHONE = navigator.userAgent.indexOf('iPhone')>-1 ? true : false;
+  var IS_IPHONE_WEIXIN = IS_WEIXIN && IS_IPHONE;
+
 
   function typeOf(obj) {
     return toString.call(obj).slice(8, -1).toLowerCase();
@@ -460,7 +466,7 @@
     var newImage;
 
     // Modern browsers
-    if (image.naturalWidth) {
+    if (image.naturalWidth && !IS_SAFARI && !IS_IPHONE_WEIXIN) {
       return callback(image.naturalWidth, image.naturalHeight);
     }
 
@@ -656,7 +662,9 @@
           orientation = dataView.getUint16(offset, littleEndian);
 
           // Override the orientation with the default value: 1
-          dataView.setUint16(offset, 1, littleEndian);
+          if (IS_SAFARI || IS_IPHONE_WEIXIN) {
+            dataView.setUint16(offset, 1, littleEndian);
+          }
           break;
         }
       }

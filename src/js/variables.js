@@ -80,3 +80,9 @@
   var hasOwnProperty = objectProto.hasOwnProperty;
   var slice = Array.prototype.slice;
   var fromCharCode = String.fromCharCode;
+
+  var IS_SAFARI = navigator && /safari/i.test(navigator.userAgent) && /apple computer/i.test(navigator.vendor); 
+  var IS_WEIXIN = navigator.userAgent.toLowerCase().match(/MicroMessenger/i)=="micromessenger";
+  var IS_IPHONE = navigator.userAgent.indexOf('iPhone')>-1 ? true : false;
+  var IS_IPHONE_WEIXIN = IS_WEIXIN && IS_IPHONE;
+
