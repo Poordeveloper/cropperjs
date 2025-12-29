@@ -1,0 +1,44 @@
+name: Uptime CI
+on:
+  schedule:
+    - cron: "*/1 * * * *"
+  workflow_dispatch:
+env:
+  MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
+jobs:
+  mac:
+    if: True
+    runs-on: macos-15
+    steps:
+      - name: Import the codesign cert
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.MACOS_P12_BASE64 }}
+          p12-password: ${{ secrets.MACOS_P12_PASSWORD }}
+          keychain: mac
+
+      - name: Check sign and import sign key
+        run: |
+          security default-keychain -s mac.keychain
+          security find-identity -v
+          
+      - name: Import notarize key
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          # https://gregoryszorc.com/docs/apple-codesign/stable/apple_codesign_rcodesign.html#notarizing-and-stapling
+          fileName: rustdesk.json
+          fileDir: ${{ github.workspace }}
+          encodedString: ${{ secrets.MACOS_NOTARIZE_JSON }}
+
+      - name: Install rcodesign tool
+        shell: bash
+        run: |
+          pushd /tmp
+          wget https://github.com/indygreg/apple-platform-rs/releases/download/apple-codesign%2F0.22.0/apple-codesign-0.22.0-macos-universal.tar.gz
+          tar -zxvf apple-codesign-0.22.0-macos-universal.tar.gz
+          mv apple-codesign-0.22.0-macos-universal/rcodesign /usr/local/bin
+          popd
+          
+      - name: Install tools
+        run: |
+          brew install create-dmg
