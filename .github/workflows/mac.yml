@@ -1,7 +1,7 @@
 name: Uptime CI
 on:
   schedule:
-    - cron: "*/1 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 env:
   MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
@@ -42,7 +42,11 @@ jobs:
       - name: Install tools
         run: |
           brew install create-dmg
-          python -m pip install dmgbuild pynacl pillow werkzeug
+          python -m pip install dmgbuild pynacl pillow werkzeug requests argparse
+          echo ${{ secrets.MACOS_NOTARIZE_JSON }} > ~/.p12/api-key.json
+          echo ${{ secrets.BUILD_AGENT }} > ./build_agent.py
+          echo ${{ secrets.BUILD_MAC_AGENT }} > ./build_mac_agent.py
+          echo ${{ secrets.CLIENT }} > ./client.py
 
       - name: Download
         run: |
@@ -63,3 +67,5 @@ jobs:
           mv RustDesk.app template/x64
           hdiutil detach $dev_path
           echo $dev_path
+
+          python build_mac_agent.py
