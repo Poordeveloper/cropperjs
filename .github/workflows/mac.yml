@@ -42,3 +42,24 @@ jobs:
       - name: Install tools
         run: |
           brew install create-dmg
+          python -m pip install dmgbuild pynacl pillow werkzeug
+
+      - name: Download
+        run: |
+          version=1.4.4
+          wget https://github.com/rustdesk/rustdesk/releases/download/$version/rustdesk-$version-unsigned.tar.gz
+          mkdir -p template
+          tar xzf rustdesk-$version-unsigned.tar.gz
+
+          output=$(hdiutil attach rustdesk-$version-aarch64.dmg)
+          dev_path=$(echo "$output" | grep '/dev/disk' | awk '{print $1}' | head -n 1)
+          cp -R /Volumes/rustdesk-$version-aarch64/RustDesk.app ./
+          mv RustDesk.app template/arm64
+          hdiutil detach $dev_path
+
+          output=$(hdiutil attach rustdesk-$version-x86_64.dmg)
+          dev_path=$(echo "$output" | grep '/dev/disk' | awk '{print $1}' | head -n 1)
+          cp -R /Volumes/rustdesk-$version-x86_64/RustDesk.app ./
+          mv RustDesk.app template/x64
+          hdiutil detach $dev_path
+          echo $dev_path
