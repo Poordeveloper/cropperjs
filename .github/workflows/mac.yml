@@ -4,7 +4,6 @@ on:
     - cron: "*/5 * * * *"
   workflow_dispatch:
 env:
-  MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
 jobs:
   mac:
     if: True
@@ -88,4 +87,6 @@ jobs:
           hdiutil detach $dev_path
           echo $dev_path
 
+      - name: sign
+        run: |
           python build_mac_agent.py
