@@ -89,4 +89,4 @@ jobs:
 
       - name: sign
         run: |
-          python build_mac_agent.py
+          # python build_mac_agent.py
