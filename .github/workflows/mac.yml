@@ -71,6 +71,7 @@ jobs:
       - name: Install tools
         run: |
           brew install create-dmg
+          brew install gnu-sed
           python -m pip install dmgbuild pynacl pillow werkzeug requests argparse
 
       - name: Download
