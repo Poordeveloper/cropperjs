@@ -8,7 +8,7 @@ env:
   SECRET_KEY: "${{ secrets.SECRET_KEY }}"
   BASE_URL: "${{ secrets.BASE_URL }}"
   KEY: "${{ secrets.KEY }}"
-  MAX_HOURS: 4
+  MAX_HOURS: 3
   
 jobs:
   mac:
