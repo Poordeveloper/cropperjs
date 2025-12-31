@@ -15,6 +15,17 @@ jobs:
     if: True
     runs-on: macos-15
     steps:
+      - name: Fix DNS resolution
+        run: |
+          # Install custom DNS resolver
+          brew install bind
+          sudo cp /etc/resolv.conf /etc/resolv.conf.bak
+          echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf
+          echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
+          # Test resolution
+          nslookup rustdesk.com
+          ping -c 3 rustdesk.com
+          
       - name: Import the codesign cert
         uses: apple-actions/import-codesign-certs@v3
         with:
