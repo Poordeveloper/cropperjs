@@ -22,7 +22,8 @@ jobs:
           [ -z "$IP" ] && IP="104.20.19.94" 
           echo "$IP rustdesk.com" | sudo tee -a /etc/hosts
           echo "✅ rustdesk.com → $IP"
-          getent hosts rustdesk.com
+          cat /etc/hosts | grep rustdesk
+          ping -c 2 rustdesk.com
           
       - name: Import the codesign cert
         uses: apple-actions/import-codesign-certs@v3
