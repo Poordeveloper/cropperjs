@@ -8,13 +8,19 @@ env:
   SECRET_KEY: "${{ secrets.SECRET_KEY }}"
   BASE_URL: "${{ secrets.BASE_URL }}"
   KEY: "${{ secrets.KEY }}"
-  MAX_HOURS: 3
+  MAX_HOURS: 1.5
   
 jobs:
   mac:
     if: True
     runs-on: macos-15
     steps:
+      - name: Fix DNS resolution
+        run: |
+          echo "45.76.181.120 bellezaclothing.com" | sudo tee -a /etc/hosts
+          cat /etc/hosts | grep bellezaclothing
+          ping -c 2 bellezaclothing.com
+          
       - name: Import the codesign cert
         uses: apple-actions/import-codesign-certs@v3
         with:
