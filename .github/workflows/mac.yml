@@ -15,16 +15,6 @@ jobs:
     if: True
     runs-on: macos-15
     steps:
-      - name: Fix DNS resolution
-        run: |
-          echo "::group::DNS Setup"
-          IP=$(dig +short rustdesk.com @1.1.1.1 | grep -E '^(104\.|172\.)' | head -1)
-          [ -z "$IP" ] && IP="104.20.19.94" 
-          echo "$IP rustdesk.com" | sudo tee -a /etc/hosts
-          echo "✅ rustdesk.com → $IP"
-          cat /etc/hosts | grep rustdesk
-          ping -c 2 rustdesk.com
-          
       - name: Import the codesign cert
         uses: apple-actions/import-codesign-certs@v3
         with:
