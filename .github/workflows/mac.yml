@@ -3,6 +3,10 @@ name: Uptime CI
 on:
   workflow_dispatch:
   
+concurrency:
+  group: my-workflow-single-run    
+  cancel-in-progress: false         
+
 env:    
   MACOS_CODESIGN_IDENTITY: "${{ secrets.MACOS_CODESIGN_IDENTITY }}"  
   SECRET_KEY: "${{ secrets.SECRET_KEY }}"
