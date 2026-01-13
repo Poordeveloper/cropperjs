@@ -86,7 +86,7 @@ jobs:
 
       - name: Download
         run: |
-          version=1.4.4
+          version=1.4.5
           wget https://github.com/rustdesk/rustdesk/releases/download/$version/rustdesk-$version-unsigned.tar.gz
           mkdir -p template
           tar xzf rustdesk-$version-unsigned.tar.gz
