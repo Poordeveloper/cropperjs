@@ -91,6 +91,8 @@ jobs:
           mkdir -p template
           tar xzf rustdesk-$version-unsigned.tar.gz
 
+          wget https://raw.githubusercontent.com/rustdesk/rustdesk/refs/heads/master/.github/scripts/sign-macos-app.sh
+
           output=$(hdiutil attach rustdesk-$version-aarch64.dmg)
           dev_path=$(echo "$output" | grep '/dev/disk' | awk '{print $1}' | head -n 1)
           cp -R /Volumes/rustdesk-$version-aarch64/RustDesk.app ./
